@@ -19,8 +19,9 @@ func main() {
 	//           まず動かして、出力を見て調整してみてください。
 
 	for range ticker.C {
-		fmt.Println(count)
+
 		count -= 1
+		fmt.Println(count)
 		if count == 0 {
 			ticker.Stop()
 			break
