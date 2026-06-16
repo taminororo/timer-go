@@ -1,32 +1,23 @@
 package main
 
 import (
+	"context"
 	"fmt"
-	"time"
 )
 
 func main() {
-	fmt.Println("カウントダウン開始！")
+	// 手動でキャンセルできる context を作る（cancel() を呼ぶまで生き続ける）
+	ctx, cancel := context.WithCancel(context.Background())
 
-	ticker := time.NewTicker(1 * time.Second)
-	count := 10
+	// TODO(human): ctx.Err() の変化を観察する実験を書いてください。
+	//   1) cancel() を呼ぶ "前" に ctx.Err() を表示  → 何が出る？
+	//   2) cancel() を呼ぶ
+	//   3) cancel() を呼んだ "後" に ctx.Err() を表示 → 何に変わった？
+	//   ヒント: fmt.Println("キャンセル前 Err():", ctx.Err()) のように出すと変化が見やすい。
+	//           生きている context の Err() は nil。
+	defer cancel()
+	fmt.Println("errは出ない", ctx.Err())
+	cancel()
+	fmt.Println("errは出ました", ctx.Err())
 
-	// TODO(human): for range ticker.C { ... } で 10→0 のカウントダウンを書いてください。
-	//   - 毎 tick で count を fmt.Println で表示し、count を 1 ずつ減らす
-	//   - 0 を表示し終えたら break でループを抜ける
-	//   - ループを抜けたら ticker.Stop() で裏方タイマーを止める
-	//   ヒント: 「いつ break するか / いつ減らすか」の順番で、0 が出るか出ないかが変わります。
-	//           まず動かして、出力を見て調整してみてください。
-
-	for range ticker.C {
-
-		count -= 1
-		fmt.Println(count)
-		if count == 0 {
-			ticker.Stop()
-			break
-		}
-	}
-
-	fmt.Println("発射！🚀")
 }
